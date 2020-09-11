@@ -11,11 +11,12 @@ namespace Vigenere.Library
         public VigenereCode(string codeWord, int salt)
         {
             this.codeWord = codeWord;
+            this.salt = salt;
         }
         public string Encrypt(string encryptedPrhase)
         {
-            StringBuilder decrypted = new StringBuilder();
-            for (int i = 0; i <= encryptedPrhase.Length; i++)
+            StringBuilder encryptedWord = new StringBuilder();
+            for (int i = 0; i <= encryptedPrhase.Length -1; i++)
             {
                 //Se obtiene la letra a encriptar
                 string valueToEncrypt = encryptedPrhase[i].ToString().ToUpper();
@@ -26,14 +27,14 @@ namespace Vigenere.Library
                 //Se encripta el valor aplicando el desplazamiento
                 string encrypted = Shift(keyPosition + salt, valueToEncrypt);
                 //Se agrega el resultado a la cadena encriptada
-                decrypted.Append(valueToEncrypt);
+                encryptedWord.Append(encrypted);
             }
-            return decrypted.ToString();
+            return encryptedWord.ToString();
         }
         public string Decrypt(string encryptedPrhase)
         {
             StringBuilder decrypted = new StringBuilder();
-            for (int i = 0; i <= encryptedPrhase.Length; i++)
+            for (int i = 0; i <= encryptedPrhase.Length -1; i++)
             {
                 //Se obtiene la letra a desencriptar
                 string valueToDecrypt = encryptedPrhase[i].ToString().ToUpper();
@@ -56,7 +57,7 @@ namespace Vigenere.Library
         /// <returns></returns>
         private string RevertShift(int shift, string charToShift)
         {
-            int totalShift = GetLetterNumber(charToShift) - shift + fullAlphabet.Length;
+            int totalShift = (GetLetterNumber(charToShift) - shift) + fullAlphabet.Length;
             char result = fullAlphabet[totalShift % fullAlphabet.Length];
             return result.ToString();
         }
@@ -82,10 +83,14 @@ namespace Vigenere.Library
             int result = 0;
             foreach (char c in fullAlphabet)
             {
-                if (c.ToString() == letter)
+                if (c.ToString() == letter.ToUpper())
                 {
-                    break;
+                    return result;
                 }
+                else
+                {
+                    result++;
+                }    
             }
             return result;
         }
